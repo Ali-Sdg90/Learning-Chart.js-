@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bubble Chart</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1/dist/chart.umd.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    </head>
+    <body>
+        <div style="width: 1200px; height: 600px; margin: auto">
+            <canvas id="myBubbleChart"></canvas>
+        </div>
+        <script>
+            const legendSpacingPlugin = {
+                id: "legendSpacing",
+                beforeInit(chart) {
+                    const originalFit = chart.legend.fit;
+                    chart.legend.fit = function fit() {
+                        originalFit.bind(chart.legend)();
+                        this.height += 25;
+                    };
+                },
+            };
+
+            Chart.register(legendSpacingPlugin);
+            Chart.register(ChartDataLabels);
+
+            const config = {
+                type: "bubble",
+                data: {
+                    datasets: [
+                        {
+                            label: "Neighborhood",
+
+                            data: [
+                                { x: 11.6, y: 0, r: 11.6 },
+                                { x: 0, y: 0, r: 0 },
+                                { x: 4, y: 2, r: 5 },
+                                { x: 12.4, y: 3, r: 12.4 },
+                                { x: 27.4, y: 4, r: 27.4 },
+                                { x: 0, y: 0, r: 0 },
+                                { x: 0, y: 0, r: 0 },
+                                { x: 10, y: 7, r: 10 },
+                            ],
+                            backgroundColor: "rgba(0, 166, 107, 0.3)",
+                            borderColor: "rgba(0, 166, 107, 1)",
+                            borderWidth: 2,
+                            fill: false,
+                            spanGaps: false,
+                            lineTension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 3,
+                            pointStyle: "circle",
+                            borderDash: [0, 0],
+                            barPercentage: 0.8,
+                            categoryPercentage: 0.8,
+                        },
+                        {
+                            label: "Municipality",
+                            data: [
+                                { x: 0, y: 0, r: 0 },
+                                { x: 6.4, y: 1, r: 6.4 },
+                                { x: 0, y: 2, r: 0 },
+                                { x: 3.6, y: 3, r: 4.6 },
+                                { x: 0, y: 4, r: 0 },
+                                { x: 7.2, y: 5, r: 7.2 },
+                                { x: 16.4, y: 6, r: 16.4 },
+                                { x: 33, y: 7, r: 33 },
+                            ],
+                            backgroundColor: "rgba(0, 155, 232, 0.3)",
+                            borderColor: "#009be8",
+                            borderWidth: 2,
+                            fill: false,
+                            spanGaps: false,
+                            lineTension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 3,
+                            pointStyle: "circle",
+                            borderDash: [0, 0],
+                            barPercentage: 0.8,
+                            categoryPercentage: 0.8,
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function (value, index, values) {
+                                    const countries = [
+                                        "South Korea",
+                                        "Sri Lanka",
+                                        "Russia",
+                                        "Philippines",
+                                        "Iran",
+                                        "India",
+                                        "Hong Kong",
+                                        "China",
+                                    ];
+                                    return countries[index];
+                                },
+                                font: {
+                                    size: 12,
+                                    family: "sans-serif",
+                                    weight: "bold",
+                                    lineHeight: 1.2,
+                                },
+                                color: "#00323F",
+                            },
+                        },
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: "Percentage of Population",
+                                color: "#00323F",
+                                font: {
+                                    size: 16,
+                                    family: "sans-serif",
+                                    weight: "bold",
+                                    lineHeight: 1.2,
+                                },
+                                color: "#00323F",
+                                padding: 20,
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12,
+                                    family: "sans-serif",
+                                    weight: "bold",
+                                    lineHeight: 1.2,
+                                },
+                                color: "#00323F",
+                            },
+                            max: 40,
+                        },
+                    },
+                    plugins: {
+                        datalabels: {
+                            display: true,
+                            align: function (context) {
+                                var value =
+                                    context.dataset.data[context.dataIndex];
+                                var chartHeight = context.chart.height;
+                                var yScale = context.chart.scales.y;
+                                var yPos = yScale.getPixelForValue(value.y);
+                                var radius = value.r;
+
+                                if (yPos - radius - 100 < 0) {
+                                    return "end";
+                                }
+                                return "start";
+                            },
+                            anchor: "center",
+                            offset: function (context) {
+                                var value =
+                                    context.dataset.data[context.dataIndex];
+                                var chartHeight = context.chart.height;
+                                var yScale = context.chart.scales.y;
+                                var yPos = yScale.getPixelForValue(value.y);
+                                var radius = value.r;
+
+                                if (yPos - radius - 30 < 0) {
+                                    return radius + 30;
+                                }
+                                return -radius - 30;
+                            },
+                            padding: 4,
+                            color: "#666666",
+                            font: {
+                                family: "sans-serif",
+                                size: 14,
+                                style: "normal",
+                            },
+                            formatter: function (value, context) {
+                                if (value.x != 0) {
+                                    return value.x + "%";
+                                } else {
+                                    return "";
+                                }
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: "Top Five Total Birth Places for Immigrants",
+                            font: {
+                                size: 26,
+                                family: "sans-serif",
+                                style: "bold",
+                            },
+                            color: "#00323F",
+                            padding: 10,
+                        },
+                        legend: {
+                            display: true,
+                            position: "top",
+                        },
+                        subtitle: {
+                            display: true,
+                            text: "Birth Places",
+                            font: {
+                                size: 14,
+                            },
+                            padding: {
+                                bottom: 10,
+                            },
+                            rotation: 270,
+                            position: "left",
+                            font: {
+                                size: 16,
+                                family: "sans-serif",
+                                weight: "bold",
+                                lineHeight: 1.2,
+                            },
+                            color: "#00323F",
+                            padding: 20,
+                        },
+                    },
+                },
+            };
+
+            new Chart(document.getElementById("myBubbleChart"), config);
+        </script>
+    </body>
+</html>

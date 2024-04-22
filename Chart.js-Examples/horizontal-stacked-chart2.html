@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>horizontal bar Chart</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    </head>
+    <body>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background-color: #222;
+            }
+
+            .chart-container {
+                width: 1200px;
+                height: 500px;
+                background-color: white;
+                padding: 10px;
+                box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            #electionResultsChart {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+
+        <div class="chart-container">
+            <canvas id="electionResultsChart"></canvas>
+        </div>
+
+        <script>
+            const legendSpacingPlugin2 = {
+                id: "legendSpacing",
+                beforeInit(chart) {
+                    const originalFit = chart.legend.fit;
+                    chart.legend.fit = function fit() {
+                        originalFit.bind(chart.legend)();
+                        this.width += 50;
+                    };
+                },
+            };
+
+            const legendSpacingPlugin1 = {
+                id: "legendSpacing",
+                afterUpdate(chart) {
+                    const legend = chart.legend;
+                    const originalLeft = legend.left;
+                    // legend.left = originalLeft - 50;
+                    // legend.right = legend.right + 50;
+                    legend.top = legend.top + 50;
+                    // legend.width = legend.width + 50;
+                    // chart.legend.width += 50;
+                },
+            };
+
+            Chart.register(legendSpacingPlugin1);
+            Chart.register(legendSpacingPlugin2);
+
+            Chart.register(ChartDataLabels);
+
+            const ctx = document
+                .getElementById("electionResultsChart")
+                .getContext("2d");
+            const electionResultsChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: [
+                        ["Riding", "results"],
+                        ["Polling", "station", "results"],
+                    ],
+                    datasets: [
+                        {
+                            label: ["Conservative", "Melissa Lantsman"],
+                            data: [51, 39],
+                            backgroundColor: "#009BE8",
+                            stack: "Stack 0",
+                            barThickness: 80,
+                            borderColor: "#FFFFFF",
+                            borderWidth: 1,
+                        },
+                        {
+                            label: ["Liberal", "Gary Gladstone"],
+                            data: [36, 43],
+                            backgroundColor: "#FF5C5F",
+                            stack: "Stack 0",
+                            barThickness: 80,
+                            borderColor: "#FFFFFF",
+                            borderWidth: 1,
+                        },
+                        {
+                            label: ["New Democratic", "Raz Razvi"],
+                            data: [6, 9],
+                            backgroundColor: "#FF8436",
+                            stack: "Stack 0",
+                            barThickness: 80,
+                            borderColor: "#FFFFFF",
+                            borderWidth: 1,
+                        },
+                        {
+                            label: ["Green", "Daniella Mikanovski"],
+                            data: [5, 2],
+                            backgroundColor: "#00C27E",
+                            stack: "Stack 0",
+                            barThickness: 80,
+                            borderColor: "#FFFFFF",
+                            borderWidth: 1,
+                        },
+                        {
+                            label: ["People's", "Samuel Greenfield"],
+                            data: [2, 7],
+                            backgroundColor: "#CA6DFF",
+                            stack: "Stack 0",
+                            barThickness: 80,
+                            borderColor: "#FFFFFF",
+                            borderWidth: 1,
+                        },
+                    ],
+                },
+                options: {
+                    indexAxis: "y",
+                    plugins: {
+                        datalabels: {
+                            display: true,
+                            anchor: "center",
+                            align: "top",
+                            offset: 38,
+                            padding: 4,
+                            color: "#647882",
+                            font: {
+                                family: "sans-serif",
+                                size: 14,
+                                style: "normal",
+                            },
+                            formatter: (value, context) => {
+                                return value;
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: "Federal election results in your riding",
+                            color: "#00323F",
+                            font: {
+                                size: 32,
+                                family: "sans-serif",
+                                weight: "bold",
+                            },
+                            padding: 40,
+                        },
+                        legend: {
+                            display: true,
+                            position: "right",
+                            align: "center",
+                            labels: {
+                                boxWidth: 30,
+                                boxHeight: 15,
+                                color: "#00323F",
+                                font: {
+                                    size: 14,
+                                    family: "sans-serif",
+                                    weight: "bold",
+                                },
+                                padding: 36,
+                            },
+                        },
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: "Percentage of votes",
+                                color: "#00323F",
+                                font: {
+                                    size: 20,
+                                    family: "sans-serif",
+                                    weight: "bold",
+                                },
+                                padding: 14,
+                            },
+                            ticks: {
+                                callback: function (value, index, values) {
+                                    return value;
+                                },
+                                color: "#00323F",
+                                font: {
+                                    size: 14,
+                                    family: "sans-serif",
+                                    weight: "bold",
+                                },
+                                padding: 14,
+                            },
+                        },
+                        y: {
+                            barThickness: "flex",
+                            categoryPercentage: 0.8,
+                            title: {
+                                display: true,
+                                text: "Results",
+                                color: "#00323F",
+                                font: {
+                                    size: 20,
+                                    family: "sans-serif",
+                                    weight: "bold",
+                                },
+                                padding: 14,
+                            },
+                            ticks: {
+                                color: "#00323F",
+                                font: {
+                                    size: 16,
+                                    family: "sans-serif",
+                                    weight: "bold",
+                                },
+                                padding: 14,
+                            },
+                        },
+                    },
+                    maintainAspectRatio: false,
+                },
+            });
+        </script>
+    </body>
+</html>

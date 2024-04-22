@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Chart.js Nested Pie Chart with Values</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    </head>
+    <body>
+        <canvas id="myChart" width="400" height="400"></canvas>
+        <script>
+            const ctx = document.getElementById("myChart").getContext("2d");
+
+            const data = {
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [
+                    {
+                        // Outer dataset
+                        data: [10, 20, 30],
+                        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+                    },
+                    {
+                        // Inner dataset
+                        data: [15, 25, 10, 5, 20, 25],
+                        backgroundColor: [
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56",
+                            "#4BC0C0",
+                            "#9966FF",
+                            "#FF9F40",
+                        ],
+                    },
+                ],
+            };
+
+            const config = {
+                type: "pie",
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                        },
+                        title: {
+                            display: true,
+                            text: "Chart.js Nested Pie Chart with Data Labels",
+                        },
+                        datalabels: {
+                            color: "#fff",
+                            textAlign: "center",
+                            font: {
+                                weight: "bold",
+                            },
+                            formatter: (value, ctx) => {
+                                // Display the value on top of pie sections
+                                return value;
+                            },
+                        },
+                    },
+                },
+                plugins: [ChartDataLabels], // Ensure you have registered the plugin
+            };
+
+            const myChart = new Chart(ctx, config);
+        </script>
+    </body>
+</html>

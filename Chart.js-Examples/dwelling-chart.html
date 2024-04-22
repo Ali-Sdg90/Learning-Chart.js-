@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dwelling Chart V2.0</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    </head>
+    <body>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                width: 100%;
+                height: 100vh;
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .chart-container {
+                width: 1200px;
+                height: 600px;
+            }
+        </style>
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+
+        <script>
+            Chart.register(ChartDataLabels);
+
+            const chartData = {
+                type: "bar",
+                data: {
+                    datasets: [
+                        {
+                            type: "line",
+                            label: "Neighborhood %",
+                            borderColor: "rgba(0, 166, 107, 1)",
+                            backgroundColor: "#00a66b",
+                            borderWidth: 2,
+                            fill: false,
+                            data: [
+                                12.2, 51.2, 62.4, 67.9, 68.8, 70.9, 89.5, 100,
+                            ],
+                            spanGaps: false,
+                            tension: 0,
+                            pointRadius: 3,
+                            pointHoverRadius: 3,
+                            pointStyle: "circle",
+                            borderDash: [0, 0],
+                            yAxisID: "y2",
+                            datalabels: {
+                                display: false,
+                            },
+                        },
+                        {
+                            type: "line",
+                            label: "Municipality %",
+                            backgroundColor: "#009be8",
+                            data: [
+                                2.6, 18.6, 37.2, 52.8, 67.3, 79.5, 91.6, 100.2,
+                            ],
+                            borderColor: "#009be8",
+                            borderWidth: 2,
+                            fill: false,
+                            spanGaps: false,
+                            tension: 0,
+                            pointRadius: 3,
+                            pointHoverRadius: 3,
+                            pointStyle: "circle",
+                            borderDash: [0, 0],
+                            yAxisID: "y2",
+                            datalabels: {
+                                display: false,
+                            },
+                        },
+                        {
+                            type: "bar",
+                            label: "Neighborhood",
+                            backgroundColor: "rgba(202, 109, 255, 0.3)",
+                            data: [585, 1870, 535, 265, 45, 100, 890, 505],
+                            fill: false,
+                            spanGaps: false,
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 3,
+                            pointStyle: "circle",
+                            borderDash: [0, 0],
+                            borderColor: "rgba(202, 109, 255, 1)",
+                            borderWidth: 2,
+                            borderRadius: {
+                                topLeft: 10,
+                                topRight: 10,
+                                bottomLeft: 10,
+                                bottomRight: 10,
+                            },
+                            borderSkipped: false,
+                        },
+                    ],
+                    labels: [
+                        "1960 or before",
+                        "1961 to 1980",
+                        "1981 to 1990",
+                        "1991 to 2000",
+                        "2001 to 2005",
+                        "2006 to 2010",
+                        "2011 to 2016",
+                        "2016 to 2021",
+                    ],
+                },
+                options: {
+                    layout: {
+                        padding: {
+                            top: 20,
+                            right: 20,
+                            bottom: 20,
+                            left: 20,
+                        },
+                    },
+                    plugins: {
+                        title: {
+                            display: false,
+                            text: "Chart.js Combo Bar Line Chart",
+                        },
+                        legend: {
+                            display: true,
+                            position: "top",
+                            labels: {
+                                boxWidth: 40,
+                                color: "#00323F",
+                            },
+                        },
+                        tooltip: {
+                            mode: "index",
+                            intersect: true,
+                        },
+                        datalabels: {
+                            color: "#647882",
+                            anchor: "end",
+                            align: "top",
+                            font: {
+                                size: 12,
+                                family: "sans-serif",
+                                style: "normal",
+                            },
+                            formatter: function (value, context) {
+                                return value;
+                            },
+                        },
+                    },
+                    scales: {
+                        x: {
+                            type: "category",
+                            position: "bottom",
+                            grid: {
+                                display: true,
+                                color: "rgba(0, 0, 0, 0.1)",
+                                borderDash: [0, 0],
+                                lineWidth: 1,
+                                drawBorder: true,
+                                drawOnChartArea: true,
+                                drawTicks: true,
+                                tickLength: 10,
+                                zeroLineWidth: 1,
+                                zeroLineColor: "rgba(0, 0, 0, 0.25)",
+                                zeroLineBorderDash: [0, 0],
+                            },
+                            ticks: {
+                                color: "#00323F",
+                                font: {
+                                    size: 14,
+                                    family: "sans-serif",
+                                    style: "medium",
+                                },
+                                padding: 10,
+                                minRotation: 45,
+                                maxRotation: 45,
+                            },
+                            title: {
+                                display: true,
+                                text: "Year",
+                                color: "#00323F",
+                                font: {
+                                    size: 16,
+                                    family: "sans-serif",
+                                    weight: "bold",
+                                },
+                                padding: 20,
+                            },
+                        },
+                        y1: {
+                            type: "linear",
+                            position: "left",
+                            min: 0,
+                            max: 4000,
+                            grid: {
+                                display: false,
+                                color: "rgba(0, 0, 0, 0.1)",
+                                borderDash: [0, 0],
+                                lineWidth: 1,
+                                drawBorder: true,
+                                drawOnChartArea: true,
+                                drawTicks: true,
+                                tickLength: 10,
+                                zeroLineWidth: 0,
+                                zeroLineColor: "rgba(0, 0, 0, 0.25)",
+                                zeroLineBorderDash: [0, 0],
+                            },
+                            ticks: {
+                                color: "#00323F",
+                                font: {
+                                    size: 14,
+                                    family: "sans-serif",
+                                    style: "medium",
+                                },
+                                padding: 10,
+                            },
+                            title: {
+                                display: true,
+                                text: "Dwellings built",
+                                color: "#00323F",
+                                font: {
+                                    size: 15,
+                                    family: "sans-serif",
+                                    weight: "bold",
+                                },
+                                padding: 20,
+                            },
+                        },
+                        y2: {
+                            type: "linear",
+                            position: "right",
+                            min: 0,
+                            max: 100,
+                            grid: {
+                                display: false,
+                                color: "rgba(0, 0, 0, 0.1)",
+                                borderDash: [0, 0],
+                                lineWidth: 0,
+                                drawBorder: true,
+                                drawOnChartArea: true,
+                                drawTicks: true,
+                                tickLength: 10,
+                                zeroLineWidth: 0,
+                                zeroLineColor: "rgba(0, 0, 0, 0.25)",
+                                zeroLineBorderDash: [1, 1],
+                            },
+                            ticks: {
+                                color: "#00323F",
+                                font: {
+                                    size: 14,
+                                    family: "sans-serif",
+                                    style: "medium",
+                                },
+                                padding: 0,
+                                min: 0,
+                                max: 100,
+                            },
+                            title: {
+                                display: true,
+                                text: "Percentage of total dwellings",
+                                color: "#00323F",
+                                font: {
+                                    size: 16,
+                                    family: "sans-serif",
+                                    weight: "bold",
+                                },
+                                padding: 20,
+                            },
+                        },
+                    },
+                    responsive: true,
+                    clip: false,
+                },
+            };
+
+            const ctx = document.getElementById("myChart").getContext("2d");
+            const myChart = new Chart(ctx, chartData);
+        </script>
+    </body>
+</html>

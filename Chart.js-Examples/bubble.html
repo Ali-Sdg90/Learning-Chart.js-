@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Chart.js Example</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <!-- Include Chart.js library -->
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+        <!-- Include Chart.js Datalabels plugin -->
+    </head>
+    <body>
+        <canvas id="myChart" width="400" height="200"></canvas>
+        <!-- Canvas element for Chart.js -->
+
+        <script>
+            // Register the Datalabels plugin globally
+            Chart.register(ChartDataLabels);
+
+            // Custom plugin to draw text
+            const customTextPlugin = {
+                id: "customTextPlugin",
+                beforeDraw: (chart) => {
+                    const ctx = chart.ctx;
+                    const padding = 50; // Define padding for the custom text
+                    ctx.save();
+
+                    // Top text
+                    ctx.font = "16px Arial";
+                    ctx.textAlign = "center";
+                    ctx.fillText("Top Text", chart.width / 2, padding / 2);
+
+                    // Left text (with rotation)
+                    ctx.translate(padding / 2, chart.height / 2);
+                    ctx.rotate(-Math.PI / 2);
+                    ctx.fillText("Left Text", 0, 0);
+
+                    // Bottom text
+                    ctx.rotate(Math.PI / 2); // Reset rotation
+                    ctx.translate(-padding / 2, -chart.height / 2); // Reset translation
+                    ctx.textAlign = "center";
+                    ctx.fillText(
+                        "Bottom Text",
+                        chart.width / 2,
+                        chart.height - padding / 2
+                    );
+
+                    ctx.restore();
+                },
+            };
+
+            const ctx = document.getElementById("myChart").getContext("2d");
+            const myChart = new Chart(ctx, {
+                type: "bubble",
+                data: {
+                    labels: [
+                        "Red",
+                        "Blue",
+                        "Yellow",
+                        "Green",
+                        "Purple",
+                        "Orange",
+                    ],
+                    datasets: [
+                        {
+                            label: "Ali Sadeghi",
+                            data: [
+                                { x: 10, y: 20, r: 30 },
+                                { x: 15, y: 10, r: 20 },
+                                { x: 25, y: 15, r: 10 },
+                                { x: 30, y: 25, r: 5 },
+                                { x: 20, y: 30, r: 15 },
+                                { x: 5, y: 5, r: 25 },
+                            ],
+                            backgroundColor: [
+                                "rgba(255, 99, 132, 0.2)",
+                                "rgba(54, 162, 235, 0.2)",
+                                "rgba(255, 206, 86, 0.2)",
+                                "rgba(75, 192, 192, 0.2)",
+                                "rgba(153, 102, 255, 0.2)",
+                                "rgba(255, 159, 64, 0.2)",
+                            ],
+                            borderColor: [
+                                "rgba(255, 99, 132, 1)",
+                                "rgba(54, 162, 235, 1)",
+                                "rgba(255, 206, 86, 1)",
+                                "rgba(75, 192, 192, 1)",
+                                "rgba(153, 102, 255, 1)",
+                                "rgba(255, 159, 64, 1)",
+                            ],
+                            borderWidth: 1,
+                        },
+                    ],
+                },
+                options: {
+                    layout: {
+                        padding: {
+                            top: 50,
+                            right: 50,
+                            bottom: 50,
+                            left: 50,
+                        },
+                    },
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                },
+                            },
+                        ],
+                    },
+                    plugins: {
+                        // Configure the Datalabels plugin
+                        datalabels: {
+                            color: "#000000",
+                            anchor: "end",
+                            align: "top",
+                            formatter: function (value, context) {
+                                return value.r; // Display the 'r' value on top of the bubble
+                            },
+                        },
+                    },
+                },
+                plugins: [customTextPlugin], // Register the custom plugin
+            });
+        </script>
+    </body>
+</html>

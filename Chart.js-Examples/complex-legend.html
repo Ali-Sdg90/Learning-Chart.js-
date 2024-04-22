@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Chart.js Doughnut Chart with Custom Legend</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
+        <div style="width: 50%">
+            <canvas id="myChart"></canvas>
+        </div>
+        <script>
+            const data = {
+                labels: [
+                    "1 to 4 rooms",
+                    "5 rooms",
+                    "6 rooms",
+                    "7 rooms",
+                    "8+ rooms",
+                ],
+                datasets: [
+                    {
+                        label: "Number of rooms",
+                        data: [10, 20, 30, 5, 35], // Replace these values with your actual data
+                        backgroundColor: [
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56",
+                            "#4BC0C0",
+                            "#F7464A",
+                        ],
+                        hoverOffset: 4,
+                    },
+                ],
+            };
+
+            const config = {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: "right",
+                            labels: {
+                                generateLabels: function (chart) {
+                                    const datasets = chart.data.datasets;
+                                    const { labels } = chart.data;
+                                    const { data } = datasets[0];
+                                    return labels.map((label, i) => ({
+                                        text: `${label} - ${data[i]}%`,
+                                        fillStyle:
+                                            datasets[0].backgroundColor[i],
+                                    }));
+                                },
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: "Hello",
+                        },
+                    },
+                },
+            };
+
+            const myChart = new Chart(
+                document.getElementById("myChart"),
+                config
+            );
+        </script>
+    </body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Chart.js Bar Chart with Rounded Corners</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    </head>
+    <body>
+        <canvas id="myChart" width="400" height="180"></canvas>
+
+        <script>
+            const legendSpacingPlugin = {
+                id: "legendSpacing",
+                beforeInit(chart) {
+                    const originalFit = chart.legend.fit;
+                    chart.legend.fit = function fit() {
+                        originalFit.bind(chart.legend)();
+                        this.height += 50;
+                    };
+                },
+            };
+
+            Chart.register(legendSpacingPlugin);
+
+            const rightAlignLabelsPlugin = {
+                id: "rightAlignLabels",
+                beforeDraw(chart, args, options) {
+                    const ctx = chart.ctx;
+                    const originalTextAlign = ctx.textAlign;
+                    // Override the text alignment
+                    ctx.textAlign = "right";
+                    // Remember to reset the text alignment in the afterDraw hook
+                },
+                afterDraw(chart, args, options) {
+                    const ctx = chart.ctx;
+                    // Reset the text alignment to its original state
+                    ctx.textAlign = "start"; // or 'left', depending on your needs
+                },
+            };
+
+            Chart.register(rightAlignLabelsPlugin);
+
+            const config = {
+                type: "bar",
+                data: {
+                    datasets: [
+                        {
+                            label: "Neighbourhood",
+                            data: [3, 11, 2, 5, 35, 5, 15, 4, 18, 5],
+                            backgroundColor: "rgba(0, 166, 107, 0.3)",
+                            borderColor: "rgba(0, 166, 107, 1)",
+                            borderWidth: 2,
+                            fill: false,
+                            spanGaps: false,
+                            lineTension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 3,
+                            pointStyle: "circle",
+                            borderDash: [0, 0],
+                            barPercentage: 0.8,
+                            categoryPercentage: 0.8,
+                            type: "bar",
+                            hidden: false,
+                            borderRadius: 10,
+                            borderSkipped: false,
+                        },
+                        {
+                            label: "Municipality",
+                            data: [1, 11, 2, 3, 32, 4, 17, 3, 20, 10],
+                            backgroundColor: "rgba(0, 155, 232, 0.3)",
+                            borderColor: "#009be8",
+                            borderWidth: 2,
+                            fill: false,
+                            spanGaps: false,
+                            lineTension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 3,
+                            pointStyle: "circle",
+                            borderDash: [0, 0],
+                            barPercentage: 0.8,
+                            categoryPercentage: 0.8,
+                            type: "bar",
+                            hidden: false,
+                            borderRadius: 10,
+                            borderSkipped: false,
+                        },
+                    ],
+                    labels: [
+                        "Doctorate",
+                        "Master’s degree",
+                        [
+                            "Degree in medicine",
+                            "dentistry & veterinary",
+                            "dentistry & veterinary 333333333333333333",
+                        ],
+                        ["University certificate", "Diploma above bachelor"],
+                        "Bachelor’s degree",
+                        "University certificate/Diploma below bachelor",
+                        "College certificate/diploma",
+                        "Apprenticeship or trades certificate/diploma",
+                        "High school diploma",
+                        "None",
+                    ],
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            position: "top",
+                            text: "Highest Education",
+                            font: {
+                                size: 28,
+                                family: "cursive",
+                                weight: "bold",
+                                lineHeight: 1.2,
+                            },
+                            color: "#00323F",
+                            padding: 30,
+                        },
+                        legend: {
+                            display: true,
+                            position: "top",
+                            labels: {
+                                color: "#00323F",
+                                font: {
+                                    size: 14,
+                                    family: "sans-serif",
+                                    style: "normal",
+                                },
+                                padding: 10,
+                            },
+                        },
+                        tooltip: {},
+                        datalabels: {
+                            display: true,
+                            align: "top",
+                            anchor: "end",
+                            backgroundColor: "",
+                            borderColor: "",
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            padding: 5,
+                            color: "#647882",
+                            font: {
+                                family: "sans-serif",
+                                size: 12,
+                                style: "normal",
+                            },
+                        },
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: "Educations",
+                                color: "#00323F",
+                                font: {
+                                    family: "sans-serif",
+                                    size: 14,
+                                    weight: "bold",
+                                    lineHeight: 1.2,
+                                },
+                                padding: 21,
+                            },
+                            ticks: {
+                                color: "#00323F",
+                                font: {
+                                    family: "sans-serif",
+                                    size: 14,
+                                },
+                                padding: 10,
+                            },
+                            grid: {
+                                color: "rgba(0, 0, 0, 0.1)",
+                                borderColor: "rgba(0, 0, 0, 0.1)",
+                                borderWidth: 1,
+                                tickLength: 10,
+                            },
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: "Percentage Of Population (Age 25 - 64)",
+                                color: "#00323F",
+                                font: {
+                                    family: "sans-serif",
+                                    size: 14,
+                                    weight: "bold",
+                                    lineHeight: 1.2,
+                                },
+                                padding: 20,
+                            },
+                            ticks: {
+                                color: "#00323F",
+                                font: {
+                                    family: "sans-serif",
+                                    size: 14,
+                                },
+                                padding: 10,
+                            },
+                            grid: {
+                                color: "rgba(0, 0, 0, 0.1)",
+                                borderColor: "rgba(0, 0, 0, 0.1)",
+                                borderWidth: 1,
+                                tickLength: 10,
+                            },
+                            max: 40,
+                        },
+                    },
+                },
+            };
+
+            const myChart = new Chart(
+                document.getElementById("myChart"),
+                config
+            );
+        </script>
+    </body>
+</html>

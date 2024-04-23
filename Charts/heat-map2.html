@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+                font-family: sans-serif;
+            }
+
+            body {
+                background-color: #e0f0ff;
+                display: flex;
+                flex-flow: column nowrap;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                gap: 40px;
+            }
+
+            #mainContent {
+                width: 682px;
+                height: 468px;
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: center;
+                align-items: flex-end;
+                box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.112);
+                padding: 20px;
+                background-color: #ffffff;
+            }
+
+            #chartdiv {
+                background-color: #ffffff;
+                width: 914px;
+                height: 440px;
+            }
+
+            #chartScale {
+                width: 72px;
+                height: 100px;
+                margin-left: 40px;
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 10px;
+                font-size: 12px;
+            }
+
+            .scale-color {
+                background: linear-gradient(to top, #ffffff, #ff5c5f);
+                border: 1px solid rgb(20, 19, 37);
+                width: 20px;
+                height: 100%;
+            }
+
+            .scale-values {
+                display: flex;
+                flex-flow: column nowrap;
+                justify-content: space-between;
+                align-items: flex-start;
+                height: 100%;
+                margin-left: 5px;
+            }
+        </style>
+
+        <h1>Top 5 Recent Immigrant Birth Places</h1>
+        <div id="mainContent">
+            <div id="chartdiv"></div>
+            <div id="chartScale">
+                <div class="scale-color"></div>
+                <span class="scale-values">
+                    <div>425</div>
+                    <div>0</div>
+                </span>
+            </div>
+        </div>
+
+        <!-- Resources -->
+        <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+        <script>
+            const data = {
+                BR: 0,
+                CO: 0,
+                HT: 0,
+                JM: 0,
+                MX: 0.9,
+                US: 0,
+                VE: 0,
+                FR: 0,
+                DE: 0,
+                IE: 0,
+                IT: 0,
+                RU: 2.6,
+                UA: 0,
+                GB: 0,
+                DZ: 0,
+                BI: 0,
+                CM: 0,
+                CD: 0,
+                CI: 0,
+                EG: 0,
+                ER: 0,
+                ET: 0,
+                MA: 0,
+                NG: 0,
+                SO: 0,
+                ZA: 0,
+                SD: 0,
+                TN: 0,
+                AF: 0,
+                BD: 0,
+                CN: 11.1,
+                HK: 0,
+                IN: 1.7,
+                IR: 36.2,
+                IQ: 0,
+                IL: 0,
+                JP: 0,
+                JO: 0,
+                KR: 4.7,
+                LB: 0,
+                NP: 0,
+                PK: 0.9,
+                PH: 25.5,
+                SA: 0,
+                LK: 0,
+                SY: 0,
+                TR: 5.5,
+                AE: 0,
+                VN: 0,
+                AU: 0,
+            };
+
+            am5.ready(function () {
+                var root = am5.Root.new("chartdiv");
+                root.setThemes([am5themes_Animated.new(root)]);
+
+                var chart = root.container.children.push(
+                    am5map.MapChart.new(root, {
+                        panX: "none",
+                        panY: "none",
+                        // projection: am5map.geoNaturalEarth1(),
+                        projection: am5map.geoEquirectangular(),
+                        rotationX: 0,
+                        maxZoomLevel: 1, // Disable zooming
+                        homeZoomLevel: 1,
+                    })
+                );
+
+                var polygonSeries = chart.series.push(
+                    am5map.MapPolygonSeries.new(root, {
+                        geoJSON: am5geodata_worldLow,
+                    })
+                );
+
+                polygonSeries.mapPolygons.template.setAll({
+                    tooltipText: "{name}",
+                    fillOpacity: 0.8,
+                    stroke: am5.color(0x000000),
+                    strokeWidth: 0.1,
+                });
+
+                const rgbaToHex = (colorRGBA) => {
+                    let hexValues = "0x";
+                    for (let i = 0; i < 3; i++) {
+                        const valueRGB = colorRGBA[i];
+
+                        const hexValue = Math.round(valueRGB)
+                            .toString(16)
+                            .padStart(2, "0");
+                        hexValues += hexValue;
+                    }
+
+                    const alpha = colorRGBA[3];
+
+                    const alphaHex = Math.round(alpha * 255)
+                        .toString(16)
+                        .padStart(2, "0");
+                    hexValues += alphaHex;
+
+                    console.log(hexValues);
+
+                    return hexValues;
+                };
+
+                polygonSeries.mapPolygons.template.adapters.add(
+                    "fill",
+                    function (fill, target) {
+                        var dataContext = target.dataItem.dataContext;
+                        if (data[dataContext.id] !== undefined) {
+                            return am5.color(0xff5c5f);
+                        } else {
+                            return am5.color(0xffffff);
+                        }
+                    }
+                );
+
+                polygonSeries.mapPolygons.template.adapters.add(
+                    "fillOpacity",
+                    function (fillOpacity, target) {
+                        var dataContext = target.dataItem.dataContext;
+                        if (data[dataContext.id] !== undefined) {
+                            var opacity = data[dataContext.id] / 3; //random value
+                            return opacity;
+                        }
+                        return fillOpacity;
+                    }
+                );
+
+                polygonSeries.mapPolygons.template.states.create("hover", {
+                    fillOpacity: 1,
+                });
+
+                graticuleSeries.mapLines.template.setAll({
+                    stroke: root.interfaceColors.get("alternativeBackground"),
+                    strokeOpacity: 0.1,
+                });
+
+                chart.appear(1000, 100);
+            });
+        </script>
+    </body>
+</html>

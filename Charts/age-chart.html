@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Distribution of age in your neighbourhood</title>
+        <title>Distribution of age in your neighborhood</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     </head>
@@ -33,9 +33,11 @@
                 transform: translate(-8px, 5px);
             }
         </style>
+
         <div class="chart-container">
             <canvas id="chart" width="854" height="839"></canvas>
         </div>
+
         <script>
             // Note: 0.001 = 0
             const womenData = [
@@ -76,21 +78,21 @@
                 ],
             };
 
-            const generateSemiRandomAge = (i) => {
-                let age = Number(Math.random() * 5) - (50 - i) / 100;
-                if (i < 70) {
-                    age += 2;
-                }
-                console.log(age);
+            // const generateSemiRandomAge = (i) => {
+            //     let age = Number(Math.random() * 5) - (50 - i) / 100;
+            //     if (i < 70) {
+            //         age += 2;
+            //     }
+            //     console.log(age);
 
-                age = Math.abs(age);
+            //     age = Math.abs(age);
 
-                if (age < 2) {
-                    age += 2;
-                }
+            //     if (age < 2) {
+            //         age += 2;
+            //     }
 
-                return age;
-            };
+            //     return age;
+            // };
 
             // Generate labels and data
             for (let age = 0; age <= 100; age += 5) {
@@ -105,10 +107,6 @@
                 data.labels.unshift(label);
 
                 console.log(data.labels);
-
-                // data.datasets[0].data.unshift(-10 + generateSemiRandomAge(age));
-                // data.datasets[1].data.unshift(10 - generateSemiRandomAge(age));
-                // debugger;
 
                 data.datasets[0].data.unshift(-womenData[age / 5]);
                 data.datasets[1].data.unshift(menData[age / 5]);

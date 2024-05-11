@@ -23,7 +23,7 @@ body {
 }
 
 .chart-container {
-    padding: 13.2px 9.9px;
+    padding: 13.2px 9.9px 60px;
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
@@ -68,7 +68,7 @@ body {
 
 .template-section {
     line-height: 44px;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
     text-align: center;

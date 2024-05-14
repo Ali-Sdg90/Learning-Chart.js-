@@ -1,6 +1,6 @@
 module.exports = {
     mode: "development",
-    entry: "./app3.js",
+    entry: "./app7.js",
     // entry: "./app6.js",
     output: {
         filename: "bundle.js",

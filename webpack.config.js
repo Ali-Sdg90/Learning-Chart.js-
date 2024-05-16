@@ -1,10 +1,11 @@
+const path = require("path")
+
 module.exports = {
     mode: "development",
-    entry: "./app7.js",
-    // entry: "./app6.js",
+    entry: "./Webpack-Tests/app7.js",
     output: {
         filename: "bundle.js",
-        path: __dirname,
+        path: path.resolve(__dirname, "dist"),
     },
     module: {
         rules: [

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gradient-bar</title>
+
+</head>
+
+<body>
+    <canvas id="myChart" width="400" height="200"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <script>
+
+        const ctx = document.getElementById('myChart');
+
+
+        const legendMargin = {
+            id: "legendMargin",
+            beforeInit: function (chart) {
+                const fitValue = chart.legend.fit;
+                chart.legend.fit = function fit() {
+                    fitValue.bind(chart.legend)();
+                    return (this.height += 30);
+                };
+            }
+        };
+
+        var chart = new Chart(ctx,
+            {
+                type: 'bar',
+                data: {
+                    datasets: [
+                        {
+                            data: [70,
+                                80,
+                                60,
+                                50,
+                                40,
+                                100,
+                                30,
+                                70,
+                                80,
+                                60,
+                                50,
+                                40,
+                                100,
+                                30,
+                                75,
+                                55,
+                                60,
+                                90,
+                                65,
+                                38],
+                            backgroundColor: (context) => {
+                                const value = context.dataset.data[context.dataIndex];
+                                const gradient = context.chart.ctx.createLinearGradient(0, 0, 0, context.chart.height / 1.3);
+
+                                if (value <= 30) {
+                                    gradient.addColorStop(1, '#42b5f2'); // Blue
+                                } else if (value > 30 && value <= 60) {
+                                    gradient.addColorStop(0.6, '#05d48a'); // Green
+                                    gradient.addColorStop(1, '#42b5f2'); // Blue
+                                } else {
+                                    gradient.addColorStop(0.4, '#fa5a5f'); // Red
+                                    gradient.addColorStop(0.6, '#05d48a'); // Green
+                                    gradient.addColorStop(1, '#42b5f2'); // Blue
+                                }
+
+                                return gradient;
+                            },
+                            borderColor: 'rgba(0, 166, 107, 1)',
+                            borderWidth: 0,
+                            borderRadius: 10,
+                            borderSkipped: false,
+                            fill: false,
+                            spanGaps: false,
+                            lineTension: 0.4,
+                            pointRadius: 3,
+                            pointHoverRadius: 3,
+                            pointStyle: 'circle',
+                            borderDash: [0, 0],
+                            barPercentage: 0.8,
+                            categoryPercentage: 0.8,
+                            type: 'bar',
+                            hidden: false,
+                        },
+                    ],
+                    labels: [
+                        "2019 Q2",
+                        "2019 Q3",
+                        "2019 Q4",
+                        "2020 Q1",
+                        "2020 Q2",
+                        "2020 Q3",
+                        "2020 Q4",
+                        "2021 Q1",
+                        "2021 Q2",
+                        "2021 Q3",
+                        "2021 Q4",
+                        "2022 Q1",
+                        "2022 Q2",
+                        "2022 Q3",
+                        "2022 Q4",
+                        "2023 Q1",
+                        "2023 Q2",
+                        "2023 Q3",
+                        "2023 Q4",
+                        "2024 Q1",
+                    ],
+                },
+                options: {
+                    plugins: {
+
+                        title: {
+                            display: false,
+                            position: 'top',
+                            text: '',
+                            font: {
+                                size: 28,
+                                family: 'sans-serif',
+                                weight: 'bold',
+                                lineHeight: 1.2,
+                            },
+                            color: '#00323F',
+                            padding: 0,
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            align: 'center',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 10,
+                                },
+                                boxWidth: 25,
+                                boxHeight: 6,
+                                generateLabels: function (chart) {
+                                    const labels = [];
+                                    const colors = ['#42b5f2', '#05d48a', '#fa5a5f']; // blue, green, red
+
+                                    ["Buyer's market", "Balanced market", "Seller's market"].forEach((text, index) => {
+                                        labels.push({
+                                            text: text,
+                                            fillStyle: colors[index],
+                                            strokeStyle: colors[index],
+                                            lineWidth: 1,
+                                            hidden: false,
+                                        });
+                                    });
+
+                                    return labels;
+                                },
+                            },
+                        },
+                        tooltip: {},
+                        datalabels: {
+                            display: true,
+                            align: 'top',
+                            anchor: 'end',
+                            backgroundColor: '',
+                            borderColor: '',
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            padding: 0,
+                            color: '#647882',
+                            font: {
+                                family: 'sans-serif',
+                                size: 10,
+                                style: 'normal',
+                            },
+                            formatter: (value) => value,
+                        },
+                    }
+                    ,
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Seasons for the last 5 years',
+                                color: '#00323F',
+                                font: {
+                                    family: 'sans-serif',
+                                    size: 18,
+                                    weight: 'bold',
+                                    lineHeight: 1.2,
+                                },
+                                padding: 12,
+                            },
+                            ticks: {
+                                color: '#00323F',
+                                font: {
+                                    family: 'sans-serif',
+                                    size: 14,
+                                },
+                                padding: 6,
+                                minRotation: 45,
+                                maxRotation: 45,
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                                borderColor: 'rgba(0, 0, 0, 0.1)',
+                                borderWidth: 1,
+                                tickLength: 10,
+                            },
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grace: '50%',
+                            title: {
+                                display: true,
+                                text: 'Sold percentage',
+                                color: '#00323F',
+                                font: {
+                                    family: 'sans-serif',
+                                    size: 18,
+                                    weight: 'bold',
+                                    lineHeight: 1.2,
+                                },
+                                padding: 12,
+                            },
+                            ticks: {
+                                color: '#00323F',
+                                font: {
+                                    family: 'sans-serif',
+                                    size: 14,
+                                },
+                                padding: 10,
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                                borderColor: 'rgba(0, 0, 0, 0.1)',
+                                borderWidth: 1,
+                                tickLength: 10,
+                            },
+                            max: 100,
+                        },
+                    },
+                },
+                plugins: [ChartDataLabels, legendMargin],
+
+            });
+
+    </script>
+
+</body>
+
+</html>

@@ -40,26 +40,37 @@
                         backgroundColor: (context) => {
                             const value =
                                 context.dataset.data[context.dataIndex];
-                            const gradient =
-                                context.chart.ctx.createLinearGradient(
-                                    0,
-                                    0,
-                                    0,
-                                    context.chart.height / 1.3
-                                );
+                            // const gradient =
+                            //     context.chart.ctx.createLinearGradient(
+                            //         0,
+                            //         0,
+                            //         0,
+                            //         context.chart.height / 1.3
+                            //     );
+
+                            // if (value <= 30) {
+                            //     gradient.addColorStop(1, "#42b5f2"); // Blue
+                            // } else if (value > 30 && value <= 60) {
+                            //     gradient.addColorStop(0.6, "#05d48a"); // Green
+                            //     gradient.addColorStop(1, "#42b5f2"); // Blue
+                            // } else {
+                            //     gradient.addColorStop(0.4, "#fa5a5f"); // Red
+                            //     gradient.addColorStop(0.6, "#05d48a"); // Green
+                            //     gradient.addColorStop(1, "#42b5f2"); // Blue
+                            // }
+
+                            // return gradient;
+                            let color;
 
                             if (value <= 30) {
-                                gradient.addColorStop(1, "#42b5f2"); // Blue
-                            } else if (value > 30 && value <= 60) {
-                                gradient.addColorStop(0.6, "#05d48a"); // Green
-                                gradient.addColorStop(1, "#42b5f2"); // Blue
+                                color = "#42b5f2"; // Blue
+                            } else if (value <= 60) {
+                                color = "#05d48a"; // Green
                             } else {
-                                gradient.addColorStop(0.4, "#fa5a5f"); // Red
-                                gradient.addColorStop(0.6, "#05d48a"); // Green
-                                gradient.addColorStop(1, "#42b5f2"); // Blue
+                                color = "#fa5a5f"; // Red
                             }
 
-                            return gradient;
+                            return color;
                         },
                         borderColor: "rgba(0, 166, 107, 1)",
                         borderWidth: 0,
@@ -250,6 +261,7 @@
                                 // return value;
                                 return "";
                             },
+                            display: false,
                             stepSize: 1,
                             color: "#00323F",
                             font: {

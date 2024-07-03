@@ -34,8 +34,8 @@
                 datasets: [
                     {
                         data: [
-                            70, 80, 60, 50, 40, 100, 30, 70, 80, 60, 50, 40,
-                            100, 30, 75, 55, 60, 90, 65, 38,
+                            70, 80, 60, 50, 40, 25, 30, 70, 10, 60, 50, 40,
+                            35, 30, 75, 55, 60, 90, 65, 38
                         ],
                         backgroundColor: (context) => {
                             const value =
@@ -90,26 +90,10 @@
                     },
                 ],
                 labels: [
-                    "2019 Q2",
-                    "2019 Q3",
-                    "2019 Q4",
-                    "2020 Q1",
-                    "2020 Q2",
-                    "2020 Q3",
-                    "2020 Q4",
-                    "2021 Q1",
-                    "2021 Q2",
-                    "2021 Q3",
-                    "2021 Q4",
-                    "2022 Q1",
-                    "2022 Q2",
-                    "2022 Q3",
-                    "2022 Q4",
-                    "2023 Q1",
-                    "2023 Q2",
-                    "2023 Q3",
-                    "2023 Q4",
-                    "2024 Q1",
+                    "Nov 2022", "Dec 2022", "Jan 2023", "Feb 2023", "Mar 2023",
+                    "Apr 2023", "May 2023", "Jun 2023", "Jul 2023", "Aug 2023",
+                    "Sep 2023", "Oct 2023", "Nov 2023", "Dec 2023", "Jan 2024",
+                    "Feb 2024", "Mar 2024", "Apr 2024",
                 ],
             },
             options: {
@@ -188,7 +172,7 @@
                         display: true,
                         title: {
                             display: true,
-                            text: "Seasons for the last 5 years",
+                            text: "Time period",
                             color: "#00323F",
                             font: {
                                 family: "sans-serif",
@@ -217,7 +201,7 @@
                     },
                     y: {
                         beginAtZero: true,
-                        grace: "50%",
+                        grace: "0",
                         title: {
                             display: true,
                             text: "Sold percentage",

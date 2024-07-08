@@ -6,11 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>gradient-bar</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chart-container {
+            width: 784px;
+            height: 470px;
+        }
+    </style>
 </head>
 
 <body>
-    <canvas id="myChart" width="400"></canvas>
-
+    <div class="chart-container">
+        <canvas id="myChart"></canvas>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
@@ -23,7 +45,7 @@
                 const fitValue = chart.legend.fit;
                 chart.legend.fit = function fit() {
                     fitValue.bind(chart.legend)();
-                    return (this.height += 30);
+                    return (this.height += 10);
                 };
             },
         };
@@ -74,7 +96,7 @@
                         },
                         borderColor: "rgba(0, 166, 107, 1)",
                         borderWidth: 0,
-                        borderRadius: 10,
+                        borderRadius: 9,
                         borderSkipped: false,
                         fill: false,
                         spanGaps: false,
@@ -97,6 +119,8 @@
                 ],
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     title: {
                         display: false,
@@ -227,6 +251,7 @@
                             borderColor: "rgba(0, 0, 0, 0.1)",
                             borderWidth: 1,
                             tickLength: 10,
+
                         },
                         max: 100,
                     },

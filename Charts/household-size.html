@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>horizontal bar Chart</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    </head>
+    <body>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background-color: #222;
+            }
+
+            .chart-container {
+                width: 1200px;
+                height: 420px;
+                background-color: white;
+                padding: 10px;
+                box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            #electionResultsChart {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+
+        <div class="chart-container">
+            <canvas id="electionResultsChart"></canvas>
+        </div>
+
+        <script>
+            Chart.register(ChartDataLabels);
+
+            const ctx = document
+                .getElementById("electionResultsChart")
+                .getContext("2d");
+            const electionResultsChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: ["Neighbourhood", "Municipality"],
+                    datasets: [
+                        {
+                            label: "1 person",
+                            data: [28, 16],
+                            backgroundColor: "#FFE2BF",
+                            barThickness: 80,
+                        },
+                        {
+                            label: "2 persons",
+                            data: [31, 29],
+                            backgroundColor: "#FFD29B",
+                            barThickness: 80,
+                        },
+                        {
+                            label: "3 persons",
+                            data: [19, 20],
+                            backgroundColor: "#FFBD6C",
+                            barThickness: 80,
+                        },
+                        {
+                            label: "4 persons",
+                            data: [15, 21],
+                            backgroundColor: "#FF9F29",
+                            barThickness: 80,
+                        },
+                        {
+                            label: "5 or more persons",
+                            data: [7, 14],
+                            backgroundColor: "#EE8300",
+                            barThickness: 80,
+                        },
+                    ],
+                },
+                options: {
+                    indexAxis: "y",
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: "top",
+                            align: "center",
+                            labels: {
+                                boxWidth: 50,
+                                boxHeight: 12,
+                                color: "#00323F",
+                                font: {
+                                    size: 14,
+                                    family: "sans-serif",
+                                    // weight: "bold",
+                                },
+                                padding: 26,
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: "Household size",
+                            color: "#000",
+                            font: {
+                                size: 34,
+                                family: "sans-serif",
+                                weight: "bold",
+                            },
+                            // padding: 40,
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return (
+                                        context.dataset.label +
+                                        ": " +
+                                        context.raw +
+                                        "%"
+                                    );
+                                },
+                            },
+                        },
+                        datalabels: {
+                            color: "#00323F",
+                            font: {
+                                size: 14,
+                                family: "sans-serif",
+                                weight: "bold",
+                            },
+                            formatter: function (value) {
+                                return value + "%";
+                            },
+                        },
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            display: false,
+                        },
+                        y: {
+                            stacked: true,
+                            ticks: {
+                                font: {
+                                    size: 16,
+                                    weight: "bold",
+                                },
+                                color: "#00323F",
+                            },
+                        },
+                    },
+                    maintainAspectRatio: false,
+                },
+            });
+        </script>
+    </body>
+</html>

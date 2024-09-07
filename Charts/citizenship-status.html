@@ -54,33 +54,15 @@
                     labels: ["Neighbourhood", "Municipality"],
                     datasets: [
                         {
-                            label: "1 person",
-                            data: [28, 16],
-                            backgroundColor: "#FFE2BF",
-                            barThickness: 80,
-                        },
-                        {
-                            label: "2 persons",
-                            data: [31, 29],
-                            backgroundColor: "#FFD29B",
-                            barThickness: 80,
-                        },
-                        {
-                            label: "3 persons",
-                            data: [19, 20],
+                            label: "Not Canadian citizens",
+                            data: [25, 15],
                             backgroundColor: "#FFBD6C",
                             barThickness: 80,
                         },
                         {
-                            label: "4 persons",
-                            data: [15, 21],
-                            backgroundColor: "#FF9F29",
-                            barThickness: 80,
-                        },
-                        {
-                            label: "5 or more persons",
-                            data: [7, 14],
-                            backgroundColor: "#EE8300",
+                            label: "Canadian citizens",
+                            data: [75, 85],
+                            backgroundColor: "#FF6B6D",
                             barThickness: 80,
                         },
                     ],
@@ -106,7 +88,7 @@
                         },
                         title: {
                             display: true,
-                            text: "Household size",
+                            text: "Citizenship status",
                             color: "#000",
                             font: {
                                 size: 34,
@@ -135,7 +117,11 @@
                                 weight: "bold",
                             },
                             formatter: function (value) {
-                                return value + "%";
+                                if (value) {
+                                    return value + "%";
+                                } else {
+                                    return "";
+                                }
                             },
                         },
                     },

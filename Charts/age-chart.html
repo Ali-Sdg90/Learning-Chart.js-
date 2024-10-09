@@ -42,6 +42,32 @@
     <script>
         const ctx = document.getElementById("chart");
 
+        const drawCustomText = {
+            id: 'drawCustomText',
+            afterDraw(chart) {
+                const ctx = chart.ctx;
+                ctx.save();
+
+                ctx.translate(40, chart.height / 2 - 35);  
+                ctx.rotate(-Math.PI / 2);  
+
+               
+                ctx.font = "bold 16px sans-serif";  
+                ctx.fillStyle = "#00323F";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+
+                const text = "Age range";
+                ctx.fillText(text, 0, 0); 
+
+                ctx.font = "normal 12px sans-serif";  
+                const subText = "(years)";
+                ctx.fillText(subText, 64, 0); 
+
+                ctx.restore();
+            }
+        };
+
         const legendMargin = {
             id: "legendMargin",
             beforeInit(chart) {
@@ -70,6 +96,7 @@
 
         Chart.register(ChartDataLabels);
         Chart.register(legendMargin);
+        Chart.register(drawCustomText);
 
         var data = {
             labels: [],
@@ -148,7 +175,7 @@
                         style: "normal",
                     },
                     formatter: (value, context) => {
-                        return `${Math.abs(value).toFixed(2)}%`;
+                        return `${Math.abs(value).toFixed(2)}`;
                     },
                 },
                 tooltip: {
@@ -156,7 +183,7 @@
                         label: (c) => {
                             const value = Number(c.raw);
                             const positiveOnly = value < 0 ? -value : value;
-                            return `${c.dataset.label}: ${positiveOnly.toString()}%`;
+                            return `${c.dataset.label}: ${positiveOnly.toString()}`;
                         },
                     },
                 },
@@ -167,7 +194,7 @@
                 },
                 subtitle: {
                     display: true,
-                    text: "Age range years",
+                    text: "",
                     font: {
                         size: 14,
                     },
@@ -209,7 +236,7 @@
                         },
                         color: "#00323F",
                         stepSize: 1,
-                        callback: (v) => `${Math.abs(v)}%`,
+                        callback: (v) => `${Math.abs(v)}`,
                     },
                     min: -10,
                     max: 10,

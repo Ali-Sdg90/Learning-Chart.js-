@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gradient-bar</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chart-container {
+            width: 784px;
+            height: 470px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chart-container">
+        <canvas id="myChart"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <script>
+        const ctx = document.getElementById("myChart");
+
+        const legendMargin = {
+            id: "legendMargin",
+            beforeInit: function (chart) {
+                const fitValue = chart.legend.fit;
+                chart.legend.fit = function fit() {
+                    fitValue.bind(chart.legend)();
+                    return (this.height += 10);
+                };
+            },
+        };
+
+        const backgroundPlugin = {
+            id: 'backgroundPlugin',
+            beforeDraw: function (chart) {
+                const ctx = chart.ctx;
+                const yAxis = chart.scales.y;
+                const chartArea = chart.chartArea;
+
+                // Get Y positions for each range
+                const yBottom = yAxis.getPixelForValue(0);
+                const y30 = yAxis.getPixelForValue(30);
+                const y60 = yAxis.getPixelForValue(60);
+                const yTop = yAxis.getPixelForValue(yAxis.max);
+
+                // Draw background from 0 to 30
+                ctx.save();
+                ctx.fillStyle = 'rgba(96, 194, 241, 0.10)';
+                ctx.fillRect(chartArea.left, y30, chartArea.right - chartArea.left, yBottom - y30);
+                ctx.restore();
+
+                // Draw background from 30 to 60
+                ctx.save();
+                ctx.fillStyle = 'rgba(218, 246, 236, 0.20)';
+                ctx.fillRect(chartArea.left, y60, chartArea.right - chartArea.left, y30 - y60);
+                ctx.restore();
+
+                // Draw background above 60
+                ctx.save();
+                ctx.fillStyle = 'rgba(253, 216, 204, 0.20)';
+                ctx.fillRect(chartArea.left, yTop, chartArea.right - chartArea.left, y60 - yTop);
+                ctx.restore();
+            }
+        };
+
+
+        var chart = new Chart(ctx, {
+            type: "line",
+            data: {
+                datasets: [
+                    {
+                        data: [
+                            70, 80, 60, 50, 40, 25, 30, 70, 10, 60, 50, 40,
+                            35, 30, 75, 55, 60, 90, 65, 38
+                        ],
+                        backgroundColor: (context) => {
+                            const value =
+                            context.dataset.data[context.dataIndex];
+                            let color;
+
+                            if (value <= 30) {
+                                color = "#42b5f2"; // Blue
+                            } else if (value <= 60) {
+                                color = "#05d48a"; // Green
+                            } else {
+                                color = "#fa5a5f"; // Red
+                            }
+
+                            return color;
+                        },
+                        borderWidth: 0.5,
+                        borderColor: "#D3D3D3",
+                        borderRadius: 9,
+                        borderSkipped: false,
+                        fill: false,
+                        spanGaps: false,
+                        lineTension: 0.4,
+                        pointRadius: 4,
+                        pointHoverRadius: 3,
+                        pointStyle: "circle",
+                        borderDash: [0, 0],
+                        barPercentage: 0.8,
+                        categoryPercentage: 0.8,
+                        type: "line",
+                        hidden: false,
+                    },
+                ],
+                labels: [
+                    "Nov 2022", "Dec 2022", "Jan 2023", "Feb 2023", "Mar 2023",
+                    "Apr 2023", "May 2023", "Jun 2023", "Jul 2023", "Aug 2023",
+                    "Sep 2023", "Oct 2023", "Nov 2023", "Dec 2023", "Jan 2024",
+                    "Feb 2024", "Mar 2024", "Apr 2024",
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false,
+                        position: "top",
+                        text: "",
+                        font: {
+                            size: 28,
+                            family: "sans-serif",
+                            weight: "bold",
+                            lineHeight: 1.2,
+                        },
+                        color: "#00323F",
+                        padding: 0,
+                    },
+                    legend: {
+                        display: true,
+                        position: "top",
+                        align: "center",
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 12,
+                            },
+                            boxWidth: 32,
+                            boxHeight: 10,
+                            generateLabels: function (chart) {
+                                const labels = [];
+                                const colors = [
+                                    "#42b5f2",
+                                    "#05d48a",
+                                    "#fa5a5f",
+                                ]; // blue, green, red
+
+                                [
+                                    "Buyer's market",
+                                    "Balanced market",
+                                    "Seller's market",
+                                ].forEach((text, index) => {
+                                    labels.push({
+                                        text: text,
+                                        fillStyle: colors[index],
+                                        strokeStyle: colors[index],
+                                        lineWidth: 1,
+                                        hidden: false,
+                                        fontColor: '#00323F',
+                                    });
+                                });
+
+                                return labels;
+                            },
+                        },
+                    },
+                    tooltip: {},
+                    datalabels: {
+                        display: true,
+                        align: "top",
+                        anchor: "end",
+                        backgroundColor: "",
+                        borderColor: "",
+                        borderRadius: 5,
+                        borderWidth: 1,
+                        padding: 0,
+                        color: "#647882",
+                        font: {
+                            family: "sans-serif",
+                            size: 10,
+                            style: "normal",
+                        },
+                        formatter: (value) => value,
+                    },
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: "Time period",
+                            color: "#00323F",
+                            font: {
+                                family: "sans-serif",
+                                size: 16,
+                                weight: "bold",
+                                lineHeight: 1.2,
+                            },
+                            padding: 12,
+                        },
+                        ticks: {
+                            color: "#00323F",
+                            font: {
+                                family: "sans-serif",
+                                size: 12,
+                            },
+                            padding: 6,
+                            minRotation: 45,
+                            maxRotation: 45,
+                        },
+                        grid: {
+                            color: "#efefef",
+                            borderColor: "#efefef",
+                            borderWidth: 1,
+                            tickLength: 10,
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grace: "0",
+                        title: {
+                            display: true,
+                            text: "Sold percentage",
+                            color: "#00323F",
+                            font: {
+                                family: "sans-serif",
+                                size: 16,
+                                weight: "bold",
+                                lineHeight: 1.2,
+                            },
+                            padding: 12,
+                        },
+                        ticks: {
+                            color: "#00323F",
+                            font: {
+                                family: "sans-serif",
+                                size: 12,
+                            },
+                            stepSize: 20,
+                            padding: 10,
+                        },
+                        grid: {
+                            color: "#efefef",
+                            borderColor: "#efefef",
+                            borderWidth: 1,
+                            tickLength: 10,
+
+                        },
+
+                        max: 100,
+                    },
+                    y1: {
+                        position: "right",
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function (value, index, values) {
+                                if (value === 10)
+                                    return ["Buyer's", "market"];
+                                if (value === 37)
+                                    return ["Balanced", "    "];
+                                if (value === 70)
+                                    return ["Seller's", "market"];
+                                // return value;
+                                return "";
+                            },
+                            display: false,
+                            stepSize: 1,
+                            color: "#00323F",
+                            font: {
+                                family: "sans-serif",
+                                size: 22,
+                            },
+                            padding: 30,
+                            autoSkip: false,
+                            maxRotation: 90,
+                            minRotation: 90,
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                            drawTicks: false,
+                        },
+
+                    },
+                    y2: {
+                        type: "linear",
+                        position: "right",
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 30,
+                            callback: function (value) {
+                                return "";
+                            },
+                            color: "#00323F",
+                            font: {
+                                family: "sans-serif",
+                                size: 14,
+                            },
+                            padding: -10,
+                        },
+
+                        border: {
+                            dash: [6, 4],
+                            display: true,
+                        },
+                        grid: {
+                            drawOnChartArea: true,
+                            drawTicks: false,
+                            display: true,
+                            color: function (context) {
+                                if (
+                                    context.tick.value === 0 ||
+                                    context.tick.value === 90 ||
+                                    context.tick.value === 100
+                                ) {
+                                    return "rgba(0, 0, 0, 0)";
+                                }
+                                return "rgba(0, 0, 0, 1)";
+                            },
+                            lineWidth: function (context) {
+                                if (
+                                    context.tick.value === 0 ||
+                                    context.tick.value === 90 ||
+                                    context.tick.value === 100
+                                ) {
+                                    return 0;
+                                }
+                                return 1.5;
+                            },
+                            color: "#00323F",
+                            z: 0,
+                        },
+                    },
+                },
+            },
+            plugins: [ChartDataLabels, legendMargin, backgroundPlugin],
+        });
+    </script>
+</body>
+
+</html>

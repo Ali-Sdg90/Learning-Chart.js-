@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart with Line Offset</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chart-container {
+            width: 864px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chart-container">
+    <canvas id="myChart"></canvas>
+</div>
+
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    // Custom plugin to offset line chart
+    const offsetPlugin = {
+        id: 'offsetPlugin',
+        beforeDatasetDraw(chart, args, options) {
+            if (args.index === 0) { // Apply to the first dataset (line chart)
+                const meta = chart.getDatasetMeta(args.index);
+                const offset = -12; // Set offset for x-axis here
+
+                // Ensure we only apply the offset once
+                if (!meta._initialXPositions) {
+                    meta._initialXPositions = meta.data.map(point => point.x);
+                }
+
+                // Apply offset using initial positions
+                meta.data.forEach((point, index) => {
+                    point.x = meta._initialXPositions[index] + offset;
+                });
+            }
+        }
+    };
+
+    var myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            datasets: [
+                {
+                    type: "line",
+                    label: "DOM in Rosedale-Moore Park",
+                    backgroundColor: "#FF8436",
+                    data: [21, 27, 31, 29, 12, 14, 15, 14, 21, 18, 14, 12],
+                    borderColor: "#FF8436",
+                    borderWidth: 3.5,
+                    fill: false,
+                    spanGaps: false,
+                    tension: 0,
+                    pointRadius: 3.5,
+                    pointHoverRadius: 3,
+                    pointStyle: "circle",
+                    borderDash: [0, 0],
+                    yAxisID: "y2",
+                    datalabels: {
+                        display: false
+                    }
+                },
+                {
+                    type: "bar",
+                    label: "Rosedale-Moore Park",
+                    backgroundColor: "rgba(218, 246, 236, 100)",
+                    data: [3100000, 2635000, 2862000, 3483000, 2522000, 2572000, 2750000, 3391000, 2619000, 2295000, 2817000, 2829000],
+                    fill: false,
+                    spanGaps: false,
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointHoverRadius: 3,
+                    pointStyle: "circle",
+                    borderDash: [0, 0],
+                    yAxisID: "y1",
+                    borderColor: "rgba(0, 133, 106, 100)",
+                    borderWidth: 2,
+                    borderRadius: {
+                        topLeft: 8,
+                        topRight: 8,
+                        bottomLeft: 8,
+                        bottomRight: 8
+                    },
+                    borderSkipped: false
+                },
+                {
+                    type: "bar",
+                    label: "Toronto",
+                    backgroundColor: "rgba(248, 247, 247, 100)",
+                    data: [3505400, 3435000, 3102000, 3603000, 3302000, 3222000, 2980000, 3591000, 2955000, 2510000, 3110000, 3218000],
+                    fill: false,
+                    spanGaps: false,
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointHoverRadius: 3,
+                    pointStyle: "circle",
+                    borderDash: [0, 0],
+                    yAxisID: "y1",
+                    borderColor: "rgba(211, 211, 211, 100)",
+                    borderWidth: 2,
+                    borderRadius: {
+                        topLeft: 8,
+                        topRight: 8,
+                        bottomLeft: 8,
+                        bottomRight: 8
+                    },
+                    borderSkipped: false
+                }
+            ],
+            labels: [
+                "2021 Q2", "2021 Q3", "2021 Q4", "2022 Q1",
+                "2022 Q2", "2022 Q3", "2022 Q4", "2023 Q1", "2023 Q2", "2023 Q3",
+                "2023 Q4", "2024 Q1"
+            ]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: false,
+                    text: "Chart.js Combo Bar Line Chart"
+                },
+                legend: {
+                    display: true,
+                    position: "top",
+                    labels: {
+                        boxWidth: 40,
+                        color: "#00323F"
+                    }
+                },
+                tooltip: {
+                    mode: "index",
+                    intersect: true
+                },
+                datalabels: {
+                    color: "#647882",
+                    anchor: "end",
+                    align: "top",
+                    font: {
+                        size: 12,
+                        family: "sans-serif",
+                        style: "normal"
+                    },
+                    formatter: function (value) {
+                        return (value / 1000000).toFixed(1) + 'M';
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    type: "category",
+                    position: "bottom",
+                    grid: {
+                        display: true,
+                        color: "rgba(0, 0, 0, 0.1)",
+                        borderDash: [0, 0],
+                        lineWidth: 1,
+                        drawBorder: true,
+                        drawOnChartArea: true,
+                        drawTicks: true,
+                        tickLength: 10,
+                        zeroLineWidth: 1,
+                        zeroLineColor: "rgba(0, 0, 0, 0.25)",
+                        zeroLineBorderDash: [0, 0]
+                    },
+                    ticks: {
+                        color: "#00323F",
+                        font: {
+                            size: 14,
+                            family: "sans-serif",
+                            style: "medium"
+                        },
+                        padding: 10,
+                        minRotation: 45,
+                        maxRotation: 45
+                    },
+                    title: {
+                        display: true,
+                        text: "Years quarters",
+                        color: "#00323F",
+                        font: {
+                            size: 16,
+                            family: "sans-serif",
+                            weight: "bold"
+                        },
+                        padding: 10
+                    }
+                },
+                y1: {
+                    type: "linear",
+                    position: "left",
+                    min: 0,
+                    max: 4000000,
+                    grid: {
+                        display: true,
+                        color: "rgba(0, 0, 0, 0.1)",
+                        borderDash: [0, 0],
+                        lineWidth: 1,
+                        drawBorder: true,
+                        drawOnChartArea: true,
+                        drawTicks: true,
+                        tickLength: 10,
+                        zeroLineWidth: 0,
+                        zeroLineColor: "rgba(0, 0, 0, 0.25)",
+                        zeroLineBorderDash: [0, 0]
+                    },
+                    ticks: {
+                        color: "#00323F",
+                        font: {
+                            size: 14,
+                            family: "sans-serif",
+                            style: "medium"
+                        },
+                        padding: 10,
+                        callback: function (value) {
+                            return (value / 1000000).toFixed(1) + 'M';
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: "Median price ($)",
+                        color: "#00323F",
+                        font: {
+                            size: 15,
+                            family: "sans-serif",
+                            weight: "bold"
+                        },
+                        padding: 10
+                    }
+                },
+                y2: {
+                    type: "linear",
+                    position: "right",
+                    grid: {
+                        display: true,
+                        color: "rgba(0, 0, 0, 0.1)",
+                        borderDash: [0, 0],
+                        lineWidth: 0,
+                        drawBorder: true,
+                        drawOnChartArea: true,
+                        drawTicks: true,
+                        tickLength: 10,
+                        zeroLineWidth: 0,
+                        zeroLineColor: "rgba(0, 0, 0, 0.25)",
+                        zeroLineBorderDash: [1, 1]
+                    },
+                    ticks: {
+                        color: "#00323F",
+                        font: {
+                            size: 14,
+                            family: "sans-serif",
+                            style: "medium"
+                        },
+                        padding: 0,
+                        min: 0,
+                        max: 100
+                    },
+                    title: {
+                        display: true,
+                        text: "DOM",
+                        color: "#00323F",
+                        font: {
+                            size: 14,
+                            family: "sans-serif",
+                            weight: "bold"
+                        },
+                        padding: 10
+                    }
+                }
+            },
+            responsive: true
+        },
+        plugins: [offsetPlugin]
+    });
+</script>
+
+</body>
+</html>

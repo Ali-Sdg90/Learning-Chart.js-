@@ -203,7 +203,9 @@
                             size: 10,
                             style: "normal",
                         },
-                        formatter: (value) => value,
+                        formatter: (value, context) => {
+                        return `${value}%`;
+                    },
                     },
                 },
                 scales: {

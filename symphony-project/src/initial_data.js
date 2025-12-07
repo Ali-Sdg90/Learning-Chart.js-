@@ -175,6 +175,22 @@ const INITIAL_DATA = [
         link: "https://t.me/c/1468378961/19186",
         tags: ["tag3", "tag1"],
     },
+    {
+        key: 23,
+        name: "Alireza Alizadeh",
+        date: "2025-11-22",
+        team: "ML",
+        link: "https://t.me/c/1468378961/19205",
+        tags: ["tag2", "tag1"],
+    },
+    {
+        key: 24,
+        name: "Serajoddin Aliabadi",
+        date: "2025-12-07",
+        team: "Back",
+        link: "https://t.me/c/1468378961/19246",
+        tags: ["tag2", "tag5"],
+    },
 ];
 
 // const TAG_DEFINITIONS = {
